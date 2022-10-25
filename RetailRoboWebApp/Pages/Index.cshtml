@@ -1,0 +1,119 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="text-center" >
+    <h1 class="display-4">Dashboard Summary</h1>
+    <div class="container m-5" style="margin-top: 200px;" v-scope="getSummary()">
+        <div class="row">
+
+            <div class="col-md-12">
+
+              <div v-show="!loadded">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: rgb(255, 255, 255); display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                    <g>
+                    <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;180 50 50" keyTimes="0;1"></animateTransform>
+                    
+                    <ellipse cx="50" cy="50" rx="40" ry="0.1" fill="none" stroke="#f8b26a" stroke-width="6" transform="rotate(0 50 50)"></ellipse> 
+                    <ellipse cx="50" cy="50" rx="40" ry="0.1" fill="none" stroke="#f8b26a" stroke-width="6" transform="rotate(45 50 50)"></ellipse> 
+                    <ellipse cx="50" cy="50" rx="40" ry="0.1" fill="none" stroke="#f8b26a" stroke-width="6" transform="rotate(90 50 50)"></ellipse> 
+                    <ellipse cx="50" cy="50" rx="40" ry="0.1" fill="none" stroke="#f8b26a" stroke-width="6" transform="rotate(135 50 50)"></ellipse>
+                    </g>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#e15b64" stroke-width="6"></circle>
+                    <circle cx="50" cy="50" r="20" fill="#f47e60" stroke="#f8b26a" stroke-width="6"></circle>
+                    </svg>
+                    <p> Loading Dashboard Summary</p>
+
+                </div>
+            </div>
+        </div>        
+
+        <div class="row" v-show="loadded">
+
+            <div class="col-md-6">
+                <div class="courses-container">
+                    <div class="course">
+                        <div class="course-preview">
+                            <h6></h6>
+                            <h2>Number of Checkouts</h2>
+                           
+                        </div>
+                        <div class="course-info">
+                            <div class="progress-container">
+                                <div class="progress"></div>
+                                <span class="progress-text">
+                                    
+                                </span>
+                            </div>
+                            <h6></h6>
+                            <h2 style="margin-top: 10px;">{{loadSummary[0].numCheckout}}</h2>
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                   <div class="courses-container">
+                    <div class="course">
+                        <div class="course-preview">
+                            <h6></h6>
+                            <h2>Total Checkout</h2>
+                           
+                        </div>
+                        <div class="course-info">
+                            <div class="progress-container">
+                                <div class="progress"></div>
+                                <span class="progress-text">
+                                    
+                                </span>
+                            </div>
+                            <h6></h6>
+                            <h2 style="margin-top: 10px;">&#163;{{loadSummary[0].totalCheckout}}</h2>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+                <script>
+                    PetiteVue.createApp({
+                
+                    loadded: false,
+                    loadSummary: null,
+                    
+                    // getters
+                    async getSummary() {
+                    
+                    const summary = await fetch('https://retailrobofunctions.azurewebsites.net/api/summary/',
+                    {
+                        method: 'GET', 
+                        
+                        cache: 'no-cache',
+                        
+                        headers: {
+                        'Content-Type': 'application/json',
+                        'x-functions-key':'wGQ9/aM4bNN2oU6g95fEEZ8rDi6T3xGHVHF7x9NE49daMF4xErkXPQ=='
+                      
+                        },
+                        
+                    })
+                    this.loadSummary = await summary.json()
+                    this.loadded = true
+                    
+                    }
+                   
+                   
+                }).mount()
+
+                </script>

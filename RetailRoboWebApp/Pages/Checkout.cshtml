@@ -1,0 +1,122 @@
+@page
+@model CheckoutModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+   
+
+<div class="text-center">
+    <h1 class="display-4">Checkout</h1>
+    <img src="~/image/checkout.png" style="width: 200px; height: auto;"/>
+
+    <div id="getCheckout" class="container">
+        <div class="row justify-content-center">
+            
+        <div class="col-md-8">
+    
+            <div v-scope="getCheck()">
+
+                <div v-show="!loadded">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: rgb(255, 255, 255); display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                    <g>
+                    <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;180 50 50" keyTimes="0;1"></animateTransform>
+                    
+                    <ellipse cx="50" cy="50" rx="40" ry="0.1" fill="none" stroke="#f8b26a" stroke-width="6" transform="rotate(0 50 50)"></ellipse> 
+                    <ellipse cx="50" cy="50" rx="40" ry="0.1" fill="none" stroke="#f8b26a" stroke-width="6" transform="rotate(45 50 50)"></ellipse> 
+                    <ellipse cx="50" cy="50" rx="40" ry="0.1" fill="none" stroke="#f8b26a" stroke-width="6" transform="rotate(90 50 50)"></ellipse> 
+                    <ellipse cx="50" cy="50" rx="40" ry="0.1" fill="none" stroke="#f8b26a" stroke-width="6" transform="rotate(135 50 50)"></ellipse>
+                    </g>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#e15b64" stroke-width="6"></circle>
+                    <circle cx="50" cy="50" r="20" fill="#f47e60" stroke="#f8b26a" stroke-width="6"></circle>
+                    </svg>
+                    <p> Loading Customer Checkout List</p>
+
+                </div>
+
+                <div  v-show="loadded"  class="card ">
+                    <div class="row m-2">
+                        <div class="col-md-3">
+                            <h6>Customer ID</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4"><h5>Items</h5> </div>
+                                <div class="col-md-4"><h5>Shelve ID</h5></div>
+                                <div class="col-md-4"> <h5>Price</h5></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3"><h5>Total Cost</h5></div>
+                    </div>
+
+                </div>
+                <div v-for="data in loadCheckout"  class="card shadow-1">
+                    <div class="row m-2">
+                        <div class="col-md-3">
+                            <p>#{{data.customerID}}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row" v-for="purchase in data.purchase.itemsPurchased">
+                                <div class="col-md-4">
+                                    <p>{{purchase.name}}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>{{purchase.shelveId}}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>&#163;{{purchase.price}}</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-2">
+                           &#163;{{data.purchase.totalCost}}
+                        </div>
+                    </div>
+
+                </div>
+                   
+                    
+            </div>    
+            </div>
+
+                <script>
+                    PetiteVue.createApp({
+                
+                    loadded: false,
+                    loadCheckout: null,
+                    
+                    // getters
+                   async getCheck() {
+                    
+                    const checkout = await fetch(url='https://retailrobofunctions.azurewebsites.net/api/checkout/',
+                    {
+                        method: 'GET', 
+                        
+                        cache: 'no-cache',
+                        
+                        headers: {
+                        'Content-Type': 'application/json',
+                        'x-functions-key':'wGQ9/aM4bNN2oU6g95fEEZ8rDi6T3xGHVHF7x9NE49daMF4xErkXPQ=='
+                      
+                        },
+                        
+                    }
+                    )
+                    this.loadCheckout = await checkout.json()
+                    this.loadded = true
+                    
+                    }
+                   
+                }).mount()
+
+                </script>
+
+
+        </div>
+
+ 
+           
+        </div>
+    </div>
+</div>
+

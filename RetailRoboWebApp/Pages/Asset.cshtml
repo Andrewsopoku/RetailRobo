@@ -1,0 +1,123 @@
+@page
+@model AssetModel
+@{
+    ViewData["Title"] = "Assets";
+}
+   
+
+<div class="text-center">
+    <h1 class="display-4">Retail Assets Location</h1>
+    <div id="getCheckout" class="container">
+        <div class="row justify-content-center">
+            
+        <div class="col-md-10">
+    
+
+
+                    <div class="mt-4" id="map" style="width:100%; height: 800px; "></div>
+
+
+                        <!-- Add references to the Azure Maps Map control JavaScript and CSS files. -->
+    <link href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css" rel="stylesheet" />
+    <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js"></script>
+
+    <!-- Add a reference to the Azure Maps Services Module JavaScript file. -->
+    <script src="https://atlas.microsoft.com/sdk/javascript/service/2/atlas-service.min.js"></script>
+
+
+
+
+                    <script>
+
+                        var map = new atlas.Map('map', {   
+                    view: "Auto",
+                    zoom: 14,
+                    center: [ -0.553077421198169,53.229774542416344],
+
+                    // Add your Azure Maps subscription client ID to the map SDK.
+                    authOptions: {
+                        authType: 'subscriptionKey',
+                        clientId: "0306d05d-8b87-4048-80d2-a8f8361f8e6d", // Your Azure Maps account Client ID is required to access your Azure Maps account.
+
+                       
+                    subscriptionKey: 'xYZhQhcEBXjzqCIkcxilKfQV84wc8y0k-sqFEt3hCVg'
+                    }
+                    });
+
+
+                    async function postData(url = 'https://retailrobofunctions.azurewebsites.net/api/asset/', data = {}) {
+                    
+                    const response = await fetch(url, {
+                        method: 'GET', 
+                        
+                        cache: 'no-cache',
+                        
+                        headers: {
+                        'Content-Type': 'application/json',
+                        'x-functions-key':'wGQ9/aM4bNN2oU6g95fEEZ8rDi6T3xGHVHF7x9NE49daMF4xErkXPQ=='
+                      
+                        },
+                        
+                    });
+                    result = await response.json()
+
+
+
+                    
+                    for (let i = 0; i < result.length; i++) {
+
+                        let myLatLng = [result[i].assetLocation.longitude,result[i].assetLocation.latitude ];
+                       
+
+
+//Create a HTML marker and add it to the map.
+                    var marker = new atlas.HtmlMarker({
+                        color: 'DodgerBlue',
+                        text: `${result[i].assetId}`,
+                        position:  myLatLng,
+                        popup: new atlas.Popup({
+                        content: `<div style="padding:10px">Asset ${result[i].assetId}</div>`,
+                        pixelOffset: [0, -30]
+                        })
+                    });
+
+                    map.markers.add(marker);
+
+                    //Add a click event to toggle the popup.
+                    map.events.add('click',marker, () => {
+                        marker.togglePopup();
+                    });
+
+                    }
+
+           
+                    }
+                    
+
+                    //Wait until the map resources are ready.
+                    map.events.add('ready', function () {
+
+                    postData()
+                    });
+                    </script>
+
+
+                
+                   
+                    
+            </div>    
+        </div>
+
+      
+
+
+                    
+          
+        </div>
+
+ 
+           
+        </div>
+    </div>
+</div>
+
