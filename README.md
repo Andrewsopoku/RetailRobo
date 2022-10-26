@@ -1,6 +1,6 @@
 # RetailRobo
 
-RetailRobo : A full-stack IoT cloud based solution for retail shop. I describe services and implementation strategies adopted to make RetailRobo scalable, reliable and secure. RetailRobo has 2 device/sensory components. The telemetry data used is simulated.s
+RetailRobo : A full-stack IoT cloud based solution for retail shop. I describe services and implementation strategies adopted to make RetailRobo scalable, reliable and secure. RetailRobo has 2 device/sensory components. The telemetry data used is simulated.
 
 - RFID Automated Checkout Gate : This has RFID tags, RFID reader and RFID antenna as sensors. RFID tags are fixed on items on retail shop shelves. When customers pick up items and leave the store, the device reads the tags on each item. The IoT sensors pick up and send telemetry data such as Item identifier, item name, item price, item shelf number to the cloud. The data collected can be used to tally the items and automatically deduct the cost from the customer’s payment card. This will reduce customer’s waiting time and enhance the customer experience. The shelf data collected gives insights on shelves that need to be replenished.
 
